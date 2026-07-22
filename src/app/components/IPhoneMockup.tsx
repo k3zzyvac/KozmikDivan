@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { Sun, Calendar, BarChart3, Clock, Heart, Menu, Bell } from "lucide-react";
 
-export default function IPhoneMockup() {
+const IPhoneMockup = memo(function IPhoneMockup() {
   return (
     <div className="relative w-full max-w-[550px] h-[480px] sm:h-[520px] mx-auto flex items-center justify-center select-none">
-      {/* Background Orbital Rings & Glowing Orb */}
-      <div className="orbit-container">
+      {/* Background Orbital Rings & Glowing Orb - hidden on mobile via CSS */}
+      <div className="orbit-container" aria-hidden="true">
         <div className="orbit-ring-1" />
         <div className="orbit-ring-2" />
         <div className="orbit-ring-3">
@@ -358,4 +358,6 @@ export default function IPhoneMockup() {
       </div>
     </div>
   );
-}
+});
+
+export default IPhoneMockup;

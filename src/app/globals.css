@@ -43,10 +43,35 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reduce scroll-linked animations overhead */
+  scroll-behavior: auto;
+}
+
+/* Re-enable smooth scroll on desktop only */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
   overflow-x: hidden;
+  /* Improve text rendering performance */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 ::selection {
@@ -87,14 +112,17 @@ body {
   font-family: var(--font-body);
 }
 
-/* Glass morphism card */
+/* Glass morphism card - optimized for mobile */
 .glass-card {
   background: var(--color-glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  /* Reduced blur for better mobile performance */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-glass-border);
   border-radius: 20px;
   box-shadow: var(--shadow-card);
+  /* Prevent repaint on scroll */
+  transform: translateZ(0);
 }
 
 /* Champagne gradient button with premium luxury styling */
@@ -138,7 +166,7 @@ body {
     radial-gradient(circle at 10% 30%, rgba(212, 175, 55, 0.035) 0%, transparent 45%),
     radial-gradient(circle at 90% 40%, rgba(201, 160, 137, 0.03) 0%, transparent 40%),
     radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
-  background-attachment: fixed;
+  /* background-attachment: fixed is disabled — causes full repaint on scroll on mobile */
 }
 
 /* Custom glowing drop shadow for waitlist form */
@@ -217,27 +245,55 @@ body {
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.35;
+  /* Static PNG-based glow simulation - no blur filter */
+  opacity: 0.3;
   pointer-events: none;
+  /* Hardware acceleration without blur */
+  will-change: auto;
+  transform: translateZ(0);
+  /* Use radial gradient with pre-blurred appearance */
+  background: radial-gradient(circle, 
+    rgba(212, 175, 55, 0.15) 0%, 
+    rgba(212, 175, 55, 0.08) 30%,
+    rgba(212, 175, 55, 0.03) 50%,
+    transparent 70%
+  );
 }
 
 .hero-glow-gold {
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.25), transparent 75%);
+  background: radial-gradient(circle, 
+    rgba(212, 175, 55, 0.12) 0%, 
+    rgba(212, 175, 55, 0.06) 30%,
+    rgba(212, 175, 55, 0.02) 50%,
+    transparent 70%
+  );
 }
 
 .hero-glow-rose {
-  background: radial-gradient(circle, rgba(201, 160, 137, 0.2), transparent 75%);
+  background: radial-gradient(circle, 
+    rgba(201, 160, 137, 0.1) 0%, 
+    rgba(201, 160, 137, 0.05) 30%,
+    rgba(201, 160, 137, 0.02) 50%,
+    transparent 70%
+  );
 }
 
-/* Animated floating badge */
+/* Animated floating badge - disabled by default, only on desktop */
 @keyframes badge-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 
 .badge-float {
-  animation: badge-float 3s ease-in-out infinite;
+  /* Animation disabled for performance - enable only on hover */
+  animation: none;
+}
+
+/* Desktop only - re-enable animations */
+@media (min-width: 1024px) {
+  .badge-float:hover {
+    animation: badge-float 3s ease-in-out infinite;
+  }
 }
 
 /* Subtle fade-in on load */
@@ -256,21 +312,30 @@ body {
   animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* iPhone mockup shimmer */
+/* iPhone mockup shimmer - disabled for performance */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .shimmer-effect {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
+  /* Disabled by default for GPU performance */
+  animation: none;
+  background: transparent;
+}
+
+/* Only on desktop with reduced motion preference */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .shimmer-effect:hover {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
 }
 
 /* Section divider */
@@ -305,14 +370,49 @@ input:focus {
 
 /* Responsive helpers */
 @media (max-width: 768px) {
+  /* Hide hero glows completely on mobile - GPU killer */
   .hero-glow {
-    width: 300px;
-    height: 300px;
-    filter: blur(80px);
+    display: none;
+  }
+
+  /* Hide orbit rings on mobile — pure paint cost, no UX value */
+  .orbit-container {
+    display: none;
+  }
+
+  /* Stop badge float animation on mobile */
+  .badge-float {
+    animation: none;
+  }
+
+  /* Disable backdrop blur completely on mobile - major performance win */
+  .glass-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    /* Use solid color instead of blur */
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  /* Simplify button transitions */
+  .btn-champagne {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 }
 
 /* Smooth page transitions */
 .page-transition {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Performance optimizations */
+@media (max-width: 768px) {
+  /* Disable expensive transitions on mobile */
+  * {
+    transition-duration: 0.1s !important;
+  }
+  
+  /* Optimize images */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
 }

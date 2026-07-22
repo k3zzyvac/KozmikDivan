@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useEffect, useMemo, memo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
   ChevronDown,
@@ -15,51 +15,26 @@ import IPhoneMockup from "./components/IPhoneMockup";
 import { joinWaitlist } from "./actions";
 
 /* ========================================
-   Animation Variants
+   Animation Variants - Optimized
    ======================================== */
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
+// Simplified variants - less complexity
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      delay,
-      ease: easeOut as unknown as [number, number, number, number],
-    },
-  }),
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut as unknown as [number, number, number, number] } },
 };
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.92 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      delay,
-      ease: easeOut as unknown as [number, number, number, number],
-    },
-  }),
+  hidden: { opacity: 0, scale: 0.96 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: easeOut as unknown as [number, number, number, number] } },
 };
 
 /* ========================================
-   Animated Section Wrapper
+   Optimized Section Wrapper
+   Uses native IntersectionObserver instead of Framer's useInView
    ======================================== */
-function AnimatedSection({
+const AnimatedSection = memo(function AnimatedSection({
   children,
   className = "",
   id,
@@ -68,22 +43,46 @@ function AnimatedSection({
   className?: string;
   id?: string;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            // Disconnect after first trigger - no re-observing
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "100px", threshold: 0.1 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <motion.section
-      id={id}
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={staggerContainer}
-      className={className}
-    >
-      {children}
-    </motion.section>
+    <div id={id} ref={ref} className={className}>
+      {isVisible ? (
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+        >
+          {children}
+        </motion.div>
+      ) : (
+        <div style={{ opacity: 0 }}>{children}</div>
+      )}
+    </div>
   );
-}
+});
 
 /* ========================================
    Feature Data
@@ -146,15 +145,14 @@ const faqs = [
 ];
 
 /* ========================================
-   FAQ Accordion Item
+   FAQ Accordion Item - Memoized
    ======================================== */
-function FAQItem({ q, a }: { q: string; a: string }) {
+const FAQItem = memo(function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <motion.div
-      variants={fadeInUp}
-      className="border border-[#E8E4DE] rounded-2xl overflow-hidden transition-all duration-300"
+    <div
+      className="border border-[#E8E4DE] rounded-2xl overflow-hidden transition-colors duration-200"
       style={{
         background: open ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.5)",
       }}
@@ -168,7 +166,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         </span>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.2 }}
         >
           <ChevronDown size={20} className="text-[#9B9590] flex-shrink-0" />
         </motion.div>
@@ -180,9 +178,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
-}
+});
 
 /* ========================================
    Main Page Component
@@ -193,15 +191,8 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [origin, setOrigin] = useState("https://kozmiKDivan.app");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setOrigin(window.location.origin);
-    }
-  }, []);
-
-  const referralLink = `${origin}/ref/KD7X92`;
+  // Production referral link (hardcoded for stability on mobile
+  const referralLink = "https://kozmik-divan.vercel.app/ref/KD7X92";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -259,14 +250,16 @@ export default function Home() {
         id="hero"
         className="relative flex flex-col items-center justify-start pt-6 pb-20 px-4 sm:px-6 overflow-hidden"
       >
-        {/* Background ambient glows */}
+        {/* Background ambient glows - static radial gradients, no blur filter */}
         <div
           className="hero-glow hero-glow-gold"
           style={{ top: "5%", left: "15%" }}
+          aria-hidden="true"
         />
         <div
           className="hero-glow hero-glow-rose"
           style={{ top: "15%", right: "10%" }}
+          aria-hidden="true"
         />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center">
@@ -469,18 +462,16 @@ export default function Home() {
           {/* Feature Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {features.map((feature, i) => (
-              <motion.div
+              <div
                 key={i}
-                variants={fadeInUp}
-                custom={i * 0.05}
-                className="glass-card p-6 sm:p-8 group hover:shadow-lg transition-all duration-500 hover:-translate-y-1"
+                className="glass-card p-6 sm:p-8 group hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55))",
                 }}
               >
                 <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 text-[22px] transition-transform duration-500 group-hover:scale-110"
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 text-[22px] transition-transform duration-300 group-hover:scale-110"
                   style={{
                     background:
                       "linear-gradient(135deg, #FDFCF9, #F5F0E8)",
@@ -495,7 +486,7 @@ export default function Home() {
                 <p className="text-[13px] sm:text-[14px] text-[#6B6560] leading-relaxed">
                   {feature.desc}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -526,15 +517,13 @@ export default function Home() {
           {/* Steps */}
           <div className="space-y-6 sm:space-y-8">
             {steps.map((step, i) => (
-              <motion.div
+              <div
                 key={i}
-                variants={fadeInUp}
-                custom={i * 0.1}
                 className="flex items-start gap-5 sm:gap-8 group"
               >
                 {/* Step Number */}
                 <div
-                  className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:shadow-lg"
+                  className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-shadow duration-300 group-hover:shadow-lg"
                   style={{
                     background:
                       "linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.03))",
@@ -561,7 +550,7 @@ export default function Home() {
                     {step.desc}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -602,10 +591,7 @@ export default function Home() {
         id="cta"
         className="py-16 sm:py-24 px-4 sm:px-6"
       >
-        <motion.div
-          variants={scaleIn}
-          className="max-w-2xl mx-auto text-center glass-card px-6 sm:px-12 py-10 sm:py-14 relative overflow-hidden"
-        >
+        <div className="max-w-2xl mx-auto text-center glass-card px-6 sm:px-12 py-10 sm:py-14 relative overflow-hidden">
           {/* Subtle gold accent */}
           <div
             className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] h-[2px]"
@@ -655,7 +641,7 @@ export default function Home() {
               <Check size={18} /> Sıradaki yerin ayrıldı!
             </div>
           )}
-        </motion.div>
+        </div>
       </AnimatedSection>
 
       {/* ==============================
