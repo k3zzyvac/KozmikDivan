@@ -191,8 +191,8 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  // Production referral link (hardcoded for stability on mobile
-  const referralLink = "https://kozmik-divan.vercel.app/ref/KD7X92";
+  // Site link to share
+  const siteLink = "https://kozmik-divan.vercel.app";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,14 +216,14 @@ export default function Home() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
+    navigator.clipboard.writeText(siteLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(
-      `Kozmik Divan'ı keşfet! Yapay zeka destekli kozmik asistan 🌟 ${referralLink}`
+      `Kozmik Divan'ı keşfet! Yapay zeka destekli kozmik asistan ${siteLink}`
     );
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };
@@ -382,11 +382,10 @@ export default function Home() {
                     Sıradaki Yerin Ayrıldı! 🎉
                   </h2>
                   <p className="text-[14px] sm:text-[15px] text-[#6B6560] mb-6 leading-relaxed">
-                    Arkadaşlarını davet et, lansman günü öncelikli erişim hakkı
-                    kazan.
+                    Arkadaşlarınla paylaş, birlikte keşfedin!
                   </p>
 
-                  {/* Referral Box */}
+                  {/* Share Link Box */}
                   <div
                     className="flex flex-col sm:flex-row items-stretch gap-2 p-1.5 rounded-2xl sm:rounded-full mb-4"
                     style={{
@@ -397,7 +396,7 @@ export default function Home() {
                     <input
                       type="text"
                       readOnly
-                      value={referralLink}
+                      value={siteLink}
                       className="flex-1 px-4 py-3 bg-transparent text-[13px] text-[#6B6560] rounded-xl sm:rounded-full border-none outline-none text-center sm:text-left"
                     />
                     <button
