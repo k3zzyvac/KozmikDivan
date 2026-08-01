@@ -15,22 +15,23 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Kozmik Divan — Senin Kozmik Rehberin",
+  title: "Adora — Senin Yapay Zeka Reklam Ajansın",
   description:
-    "Kozmik Divan; yapay zeka ile günlük hayatını, finansal kararlarını ve ilişkilerini doğum haritana ve gezegen hareketlerine göre optimize eder.",
+    "Adora; e-ticaret markaları için yapay zeka ile UGC video üretimi, reklam yönetimi ve satış optimizasyonu sağlayan tek platform.",
   keywords: [
-    "astroloji",
     "yapay zeka",
-    "doğum haritası",
-    "finans takvimi",
-    "fal",
-    "sinastri",
-    "kozmik divan",
+    "ugc video",
+    "e-ticaret",
+    "reklam ajansı",
+    "shopify",
+    "meta ads",
+    "tiktok ads",
+    "adora",
   ],
   openGraph: {
-    title: "Kozmik Divan — Senin Kozmik Rehberin",
+    title: "Adora — Senin Yapay Zeka Reklam Ajansın",
     description:
-      "Yapay zeka destekli kişisel yaşam asistanı ve astroloji uygulaması.",
+      "Yapay zeka destekli UGC video üreticisi ve e-ticaret reklam asistanı.",
     type: "website",
   },
 };
@@ -45,7 +46,7 @@ export default function RootLayout({
       lang="tr"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FAF9F5] text-[#2C2825] font-[var(--font-inter)]">
+      <body className="min-h-full flex flex-col bg-[#F9F8F3] text-[#1C1A17] font-[var(--font-inter)]">
         {children}
       </body>
     </html>

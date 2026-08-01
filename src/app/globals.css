@@ -1,36 +1,34 @@
 @import "tailwindcss";
 
 /* ==============================
-   Kozmik Divan — Design System
-   Light Luxury Theme
+   Adora — Design System
+   Premium E-Commerce AI Platform
    ============================== */
 
 :root {
-  /* Core Colors */
-  --color-pearl: #FAF9F5;
-  --color-pearl-warm: #F5F0E8;
-  --color-champagne: #D4AF37;
-  --color-champagne-light: #E8D48B;
-  --color-champagne-dark: #B8960E;
-  --color-rose-gold: #C9A089;
-  --color-rose-gold-light: #E8CBBF;
-  --color-text-primary: #2C2825;
+  /* Core Colors - Warm Cream & Gold Palette */
+  --color-cream: #F9F8F3;
+  --color-cream-warm: #F5F3ED;
+  --color-gold: #C19F5F;
+  --color-gold-light: #E5A11F;
+  --color-gold-dark: #A68A4A;
+  --color-charcoal: #1C1A17;
+  --color-charcoal-light: #3D3A35;
   --color-text-secondary: #6B6560;
   --color-text-muted: #9B9590;
   --color-border: #E8E4DE;
   --color-border-light: #F0ECE6;
-  --color-glass-bg: rgba(255, 255, 255, 0.65);
-  --color-glass-border: rgba(255, 255, 255, 0.4);
+  --color-glass-bg: rgba(249, 248, 243, 0.85);
 
   /* Typography */
   --font-heading: var(--font-playfair), 'Georgia', serif;
   --font-body: var(--font-inter), 'Helvetica Neue', sans-serif;
 
   /* Shadows */
-  --shadow-soft: 0 2px 20px rgba(44, 40, 37, 0.04);
-  --shadow-card: 0 4px 32px rgba(44, 40, 37, 0.06);
-  --shadow-elevated: 0 8px 48px rgba(44, 40, 37, 0.08);
-  --shadow-glow: 0 0 60px rgba(212, 175, 55, 0.12);
+  --shadow-soft: 0 2px 20px rgba(28, 26, 23, 0.04);
+  --shadow-card: 0 4px 32px rgba(28, 26, 23, 0.06);
+  --shadow-elevated: 0 8px 48px rgba(28, 26, 23, 0.08);
+  --shadow-glow: 0 0 80px rgba(193, 159, 95, 0.15);
 }
 
 /* ==============================
@@ -43,11 +41,9 @@
 
 html {
   scroll-behavior: smooth;
-  /* Reduce scroll-linked animations overhead */
-  scroll-behavior: auto;
 }
 
-/* Re-enable smooth scroll on desktop only */
+/* Desktop only smooth scroll */
 @media (min-width: 1024px) {
   html {
     scroll-behavior: smooth;
@@ -56,13 +52,12 @@ html {
 
 body {
   overflow-x: hidden;
-  /* Improve text rendering performance */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
 }
 
-/* Reduce motion for users who prefer it */
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -75,8 +70,8 @@ body {
 }
 
 ::selection {
-  background: rgba(212, 175, 55, 0.2);
-  color: var(--color-text-primary);
+  background: rgba(193, 159, 95, 0.25);
+  color: var(--color-charcoal);
 }
 
 /* ==============================
@@ -88,7 +83,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-pearl);
+  background: var(--color-cream);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -112,195 +107,71 @@ body {
   font-family: var(--font-body);
 }
 
-/* Glass morphism card - optimized for mobile */
-.glass-card {
-  background: var(--color-glass-bg);
-  /* Reduced blur for better mobile performance */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-glass-border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-card);
-  /* Prevent repaint on scroll */
-  transform: translateZ(0);
-}
-
-/* Champagne gradient button with premium luxury styling */
-.btn-champagne {
-  background: linear-gradient(135deg, #e3c16f 0%, #d4af37 40%, #c59b27 75%, #e8d48b 100%);
+/* Premium gold gradient button */
+.btn-gold {
+  background: linear-gradient(135deg, #E5A11F 0%, #C19F5F 50%, #A68A4A 100%);
   background-size: 200% 100%;
-  color: #3b3113;
+  color: #1C1A17;
   font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: none;
   box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.6),
-    0 4px 15px rgba(212, 175, 55, 0.3),
-    0 1px 2px rgba(0, 0, 0, 0.05);
+    0 4px 20px rgba(193, 159, 95, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  text-shadow: 0 0.5px 1px rgba(255, 255, 255, 0.5);
 }
 
-.btn-champagne:hover {
+.btn-gold:hover {
   background-position: 100% 0;
   box-shadow: 
-    inset 0 1px 3px rgba(255, 255, 255, 0.8),
-    0 6px 22px rgba(212, 175, 55, 0.45),
-    0 2px 4px rgba(0, 0, 0, 0.05);
+    0 6px 28px rgba(193, 159, 95, 0.5),
+    inset 0 1px 3px rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
 }
 
-.btn-champagne:active {
+.btn-gold:active {
   transform: translateY(0.5px);
-  box-shadow: 
-    inset 0 1px 1px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(212, 175, 55, 0.25);
 }
 
-/* Luxury Background Drapery Waves & Glowing Orbs */
-.luxury-drapery {
-  background-image: 
-    radial-gradient(circle at 50% -20%, rgba(245, 240, 232, 0.9) 0%, rgba(250, 249, 245, 1) 70%),
-    radial-gradient(circle at 10% 30%, rgba(212, 175, 55, 0.035) 0%, transparent 45%),
-    radial-gradient(circle at 90% 40%, rgba(201, 160, 137, 0.03) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
-  /* background-attachment: fixed is disabled — causes full repaint on scroll on mobile */
+/* Gold text accent */
+.text-gold {
+  color: var(--color-gold);
 }
 
-/* Custom glowing drop shadow for waitlist form */
-.form-glow-container {
-  box-shadow: 
-    0 12px 48px rgba(44, 40, 37, 0.06),
-    0 2px 4px rgba(44, 40, 37, 0.03),
-    0 0 50px rgba(212, 175, 55, 0.25), /* Champagne glow */
-    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+/* Section number styling */
+.section-number {
+  font-family: var(--font-heading);
+  font-size: clamp(48px, 8vw, 80px);
+  font-weight: 600;
+  color: var(--color-gold);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-/* Background orbital lines */
-.orbit-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 580px;
-  height: 580px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.orbit-ring-1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
-  border: 1px solid rgba(212, 175, 55, 0.12);
-  border-radius: 50%;
-}
-
-.orbit-ring-2 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 420px;
-  height: 420px;
-  border: 1px solid rgba(212, 175, 55, 0.08);
-  border-radius: 50%;
-}
-
-.orbit-ring-3 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 580px;
-  height: 580px;
-  border: 1.5px solid rgba(212, 175, 55, 0.15);
-  border-radius: 50%;
-}
-
-/* Glowing dot / planet on orbit */
-.orbit-planet {
-  position: absolute;
-  top: 36%;
-  right: -6px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #E8D48B 0%, #D4AF37 100%);
-  box-shadow: 
-    0 0 15px rgba(212, 175, 55, 0.8),
-    0 0 30px rgba(212, 175, 55, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.6);
-  border: 1.5px solid #FAF9F5;
-  transform: translateY(-50%);
-}
-
-.hero-glow {
+/* Warm glow background */
+.warm-glow {
   position: absolute;
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  /* Static PNG-based glow simulation - no blur filter */
-  opacity: 0.3;
+  opacity: 0.25;
   pointer-events: none;
-  /* Hardware acceleration without blur */
-  will-change: auto;
   transform: translateZ(0);
-  /* Use radial gradient with pre-blurred appearance */
   background: radial-gradient(circle, 
-    rgba(212, 175, 55, 0.15) 0%, 
-    rgba(212, 175, 55, 0.08) 30%,
-    rgba(212, 175, 55, 0.03) 50%,
+    rgba(193, 159, 95, 0.12) 0%, 
+    rgba(193, 159, 95, 0.06) 30%,
+    rgba(193, 159, 95, 0.02) 50%,
     transparent 70%
   );
 }
 
-.hero-glow-gold {
-  background: radial-gradient(circle, 
-    rgba(212, 175, 55, 0.12) 0%, 
-    rgba(212, 175, 55, 0.06) 30%,
-    rgba(212, 175, 55, 0.02) 50%,
-    transparent 70%
-  );
-}
-
-.hero-glow-rose {
-  background: radial-gradient(circle, 
-    rgba(201, 160, 137, 0.1) 0%, 
-    rgba(201, 160, 137, 0.05) 30%,
-    rgba(201, 160, 137, 0.02) 50%,
-    transparent 70%
-  );
-}
-
-/* Animated floating badge - disabled by default, only on desktop */
-@keyframes badge-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-.badge-float {
-  /* Animation disabled for performance - enable only on hover */
-  animation: none;
-}
-
-/* Desktop only - re-enable animations */
-@media (min-width: 1024px) {
-  .badge-float:hover {
-    animation: badge-float 3s ease-in-out infinite;
-  }
-}
-
-/* Subtle fade-in on load */
+/* Subtle fade-in animation */
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -309,110 +180,59 @@ body {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* iPhone mockup shimmer - disabled for performance */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Input styling */
+.input-field {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
 }
 
-.shimmer-effect {
-  /* Disabled by default for GPU performance */
-  animation: none;
-  background: transparent;
-}
-
-/* Only on desktop with reduced motion preference */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .shimmer-effect:hover {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
-  }
-}
-
-/* Section divider */
-.section-divider {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-champagne), var(--color-rose-gold));
-  border-radius: 1px;
-}
-
-/* Accordion styling */
-.accordion-content {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.accordion-content.open {
-  grid-template-rows: 1fr;
-}
-
-.accordion-inner {
-  overflow: hidden;
-}
-
-/* Focus styles */
-input:focus {
+.input-field:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-  border-color: var(--color-champagne) !important;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(193, 159, 95, 0.15);
+}
+
+/* Language switcher */
+.lang-switch {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+.lang-switch:hover {
+  color: var(--color-charcoal);
+}
+
+.lang-switch-active {
+  color: var(--color-charcoal);
+  font-weight: 500;
+}
+
+/* Card styling */
+.feature-card {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
 }
 
 /* Responsive helpers */
 @media (max-width: 768px) {
-  /* Hide hero glows completely on mobile - GPU killer */
-  .hero-glow {
+  .warm-glow {
     display: none;
-  }
-
-  /* Hide orbit rings on mobile — pure paint cost, no UX value */
-  .orbit-container {
-    display: none;
-  }
-
-  /* Stop badge float animation on mobile */
-  .badge-float {
-    animation: none;
-  }
-
-  /* Disable backdrop blur completely on mobile - major performance win */
-  .glass-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    /* Use solid color instead of blur */
-    background: rgba(255, 255, 255, 0.92);
-  }
-
-  /* Simplify button transitions */
-  .btn-champagne {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-}
-
-/* Smooth page transitions */
-.page-transition {
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Performance optimizations */
-@media (max-width: 768px) {
-  /* Disable expensive transitions on mobile */
-  * {
-    transition-duration: 0.1s !important;
   }
   
-  /* Optimize images */
-  img {
-    image-rendering: -webkit-optimize-contrast;
+  .feature-card {
+    border-radius: 12px;
   }
 }
